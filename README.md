@@ -47,7 +47,7 @@ POST /users, POST /users/login, GET /users/ID
 
 
   ==========VOIR WIKI POUR PLUS D'INFORMATION!!!!!!!!!!!!!===========
-  lien : https://github.com/DexEliman/Dash/wiki
+  lien : ici
 
 
 
