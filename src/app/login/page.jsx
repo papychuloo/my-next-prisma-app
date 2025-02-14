@@ -1,16 +1,18 @@
 "use client"; 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import du router pour redirection
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "../../components/ui/button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter(); // Initialisation du router
+  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Réinitialiser les erreurs
+    setError("");
 
     try {
       const response = await fetch("/api/login", {
@@ -21,8 +23,8 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token); // Stocker le token
-        router.push("/dashboard"); // Rediriger vers le dashboard
+        localStorage.setItem("token", data.token);
+        router.push("/dashboard");
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Échec de la connexion");
@@ -33,40 +35,57 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-semibold text-center mb-6">Connexion</h2>
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        <form className="space-y-4" onSubmit={handleLogin}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Connexion</h2>
+        {error && (
+          <div className="bg-red-50 text-red-500 p-3 rounded-lg mb-6">
+            {error}
+          </div>
+        )}
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-600">Adresse e-mail</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Adresse e-mail
+            </label>
             <input
               type="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-black" // Ajout de text-black
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-black"
               placeholder="Entrez votre e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-600">Mot de passe</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Mot de passe
+            </label>
             <input
               type="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-black" // Ajout de text-black
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 text-black"
               placeholder="Entrez votre mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
-          <div>
-            <button
-              type="submit"
-              className="w-full px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600"
-            >
-              Se connecter
-            </button>
-          </div>
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+          >
+            Se connecter
+          </Button>
         </form>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">
+            Pas encore de compte ?{" "}
+            <Link href="/signup" className="text-blue-600 hover:text-blue-800 font-medium">
+              Inscrivez-vous
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
